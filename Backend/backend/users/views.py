@@ -26,18 +26,23 @@ def create_order(request):
         raise ValidationError({"captcha_token": "This field is required."})
     if not verify_recaptcha(captcha_token, "create_order"):
         raise ValidationError({"captcha_token": "Invalid captcha. Please try again."})
-    
-    order = client.order.create({
-        "amount": 50000,  # ₹500 in paise is 50000
-        "currency": "INR",
-        "payment_capture": 1
-    })
+    try:
+        order = client.order.create({
+            "amount": 50000,  # ₹500 in paise is 50000
+            "currency": "INR",
+            "payment_capture": 1
+        })
 
-    return Response({
-        "order_id": order["id"],
-        "razorpay_key":RAZORPAY_KEY_ID,
-        "amount": 50000,
-    })
+        return Response({
+            "razorpay_order_id": order["id"],
+            "razorpay_key":RAZORPAY_KEY_ID,
+            "amount": 50000,
+        })
+    except Exception:
+        return Response(
+            {"error": "Failed to create order"},
+            status=500
+        )
     
 # view to verify payment and save student details
 
