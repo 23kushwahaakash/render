@@ -171,7 +171,7 @@ const RegistrationForm = () => {
               required
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="John Doe"
+              placeholder="Emma Watson"
               className={`w-full bg-white/5 border ${errors.name ? 'border-red-500/50' : 'border-white/10'} focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
@@ -189,7 +189,7 @@ const RegistrationForm = () => {
               required
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="id@akgec.ac.in"
+              placeholder="nameStdno@akgec.ac.in"
               className={`w-full bg-white/5 border ${errors.email ? 'border-red-500/50' : 'border-white/10'} focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
@@ -207,7 +207,7 @@ const RegistrationForm = () => {
               required
               value={formData.phone}
               onChange={handleInputChange}
-              placeholder="9876543210"
+              placeholder="x x x x x x x x x x"
               className={`w-full bg-white/5 border ${errors.phone ? 'border-red-500/50' : 'border-white/10'} focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
@@ -225,7 +225,7 @@ const RegistrationForm = () => {
               required
               value={formData.studentNumber}
               onChange={handleInputChange}
-              placeholder="2512345"
+              placeholder="25*****"
               className={`w-full bg-white/5 border ${errors.studentNumber ? 'border-red-500/50' : 'border-white/10'} focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
