@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ThreeDLogo from '../components/ThreeDLogo';
 
-// In JS, we simply destructure the props without the HeroProps interface
 const Hero = ({ onCtaClick }) => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center pt-20 px-4">
@@ -11,17 +11,18 @@ const Hero = ({ onCtaClick }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-blue-800 uppercase bg-white border border-cyan-400/20 rounded-full">
+          {/* <span className="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-blue-800 uppercase bg-white border border-cyan-400/20 rounded-full">
             CSI EVENT 2025
-          </span>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-poppins font-extrabold  bg-clip-text text-transparent bg-linear-to-t from-blue-400 to-violet-500  mb-6 leading-tight">
+          </span> */}
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-poppins font-extrabold  bg-clip-text text-transparent bg-linear-to-t from-[#365de8] via-white to-blue-800  mb-6 leading-tight">
             RENDER 4.0 <br />
             {/* <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-gray-400 to-white">
               Tech Architectures
             </span> */}
+            <ThreeDLogo/>
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
-            Workshop  curated  for Developers in HTML CSS JS & REACT.js
+          <p className="text-gray-400 p-2 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
+            Workshop  curated  for Developers  -> HTML CSS JS & REACT.js
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12">
@@ -43,7 +44,7 @@ const Hero = ({ onCtaClick }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onCtaClick}
-            className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-200 bg-indigo-600 rounded-full hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 shadow-[0_0_30px_rgba(99,102,241,0.3)]"
+            className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-200  bg-[#365de8] rounded-full hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 shadow-[0_0_30px_rgba(99,102,241,0.3)]"
           >
             Claim Your Spot
             <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

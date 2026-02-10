@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -7,7 +8,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <div className="font-poppins font-bold text-lg mb-2">
-              AKGEC <span className="text-indigo-400">WORKSHOP HUB</span>
+              CSI <span className="text-indigo-400"> AKGEC </span>
             </div>
             <p className="text-gray-500 text-sm max-w-xs">
               Empowering students through high-impact technical workshops and community building.
@@ -15,11 +16,11 @@ const Footer = () => {
           </div>
 
           <div className="text-center md:text-right">
-            <p className="text-gray-400 text-sm mb-4">
-              Contact us at: <a href="mailto:society@akgec.ac.in" className="text-indigo-400 hover:underline">society@akgec.ac.in</a>
+            <p className="text-gray-400 flex items-center justify-center text-sm mb-4 gap-1">
+              Contact us at: <FaInstagram></FaInstagram> <a href="https://www.instagram.com/csi_akgec/" className="text-indigo-400 hover:underline">CSI AKGEC</a>
             </p>
             <p className="text-gray-600 text-xs">
-              © 2025 AKGEC Tech Society. Made with 💙 by Creative Labs.
+              © 2025 AKGEC Tech Society. Made with 💙 by CSI MEMBERS.
             </p>
           </div>
         </div>

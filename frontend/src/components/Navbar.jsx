@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {  AnimatePresence } from 'framer-motion';
-import CSI from '../assets/CSI.jpg'
+import CSI from '../assets/CSI.png'
 // Removed NavbarProps interface and React.FC type
 const Navbar = ({ onRegisterClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,7 +31,7 @@ const Navbar = ({ onRegisterClick }) => {
 
         <button
           onClick={onRegisterClick}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] active:scale-95"
+          className="bg-[#365de8] hover:bg-indigo-500 text-white px-6 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] active:scale-95"
         >
           Register Now
         </button>

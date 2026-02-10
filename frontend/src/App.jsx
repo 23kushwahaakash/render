@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './Pages/Hero';
 import InfoSection from './Pages/InfoSection';
-import RulesSection from './components/RulesSection';
 import RegistrationForm from './Pages/RegistrationForm';
 import Footer from './components/Footer';
 
@@ -29,9 +28,9 @@ const App = () => {
         <main>
           <Hero onCtaClick={scrollToRegister} />
           
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-24">
             <InfoSection />
-            <RulesSection />
+           
             
             <div ref={registerRef} className="pt-16">
               <RegistrationForm />
