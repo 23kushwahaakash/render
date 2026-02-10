@@ -28,7 +28,7 @@ def create_order(request):
         raise ValidationError({"captcha_token": "Invalid captcha. Please try again."})
     try:
         order = client.order.create({
-            "amount": 15000,  # ₹150 in paise is 15000
+            "amount": 10000,  # ₹150 in paise is 15000
             "currency": "INR",
             "payment_capture": 1
         })
@@ -36,7 +36,7 @@ def create_order(request):
         return Response({
             "razorpay_order_id": order["id"],
             "razorpay_key":RAZORPAY_KEY_ID,
-            "amount": 15000,
+            "amount": 10000,
         })
     except Exception:
         return Response(
