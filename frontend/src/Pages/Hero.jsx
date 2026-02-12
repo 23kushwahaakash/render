@@ -16,13 +16,10 @@ const Hero = ({ onCtaClick }) => {
           </span> */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-poppins font-extrabold  bg-clip-text text-transparent bg-linear-to-t from-[#365de8] via-white to-blue-800  mb-6 leading-tight">
             RENDER 4.0 <br />
-            {/* <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-gray-400 to-white">
-              Tech Architectures
-            </span> */}
             <ThreeDLogo/>
           </h1>
           <p className="text-gray-400 p-2 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
-            Workshop  curated  for Developers  -> HTML CSS JS & REACT.js
+            Workshop  curated  for Developers  - HTML CSS JS & REACT.js
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12">

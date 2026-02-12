@@ -85,11 +85,6 @@ const ThreeDLogo = () => {
           }}
         />
 
-        {/* Outer rim */}
-        <div
-          className="absolute -inset-2 rounded-full border border-white/10"
-          style={{ transform: "translateZ(-20px)" }}
-        />
       </motion.div>
     </div>
   );
