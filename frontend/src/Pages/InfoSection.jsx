@@ -1,6 +1,7 @@
-import React from "react";
+import { motion } from "framer-motion";
+import React, { useState } from "react";
 import { FaHtml5, FaCss3, FaJs, FaReact } from "react-icons/fa";
-import { TbCircleDashedLetterR ,TbCircleDashedLetterE ,TbCircleDashedLetterN,TbCircleDashedLetterD } from "react-icons/tb";
+import { TbCircleDashedLetterR, TbCircleDashedLetterE, TbCircleDashedLetterN, TbCircleDashedLetterD } from "react-icons/tb";
 
 
 const cards = [
@@ -14,41 +15,44 @@ const cards = [
       { Icon: FaJs, color: "text-yellow-400" },
       { Icon: FaReact, color: "text-cyan-400" },
     ],
-    smdesc :"Gain practical knowledge of HTML, CSS, JavaScript, and React",
+    smdesc: "Gain practical knowledge of HTML, CSS, JavaScript, and React",
   },
   {
-    title: "Who should attend",
+    title: "Who should attend ?",
     desc: "AKGEC students with interest in web development who want hands-on experience with modern frontend technologies. Suitable for learners seeking to strengthen core concepts and understand real-world software development workflows.",
     gradient: "from-cyan-500 to-emerald-500",
-    smdesc :"AKGEC First Year students with interest in web development",
+    smdesc: "AKGEC First Year students with interest in web development",
   },
   {
     title: "Hands-on Project",
     desc: "Develop and deploy a production-style full-stack web application. The project emphasizes component-based architecture, state management, API integration, version control, and deployment workflows used in professional development environments.",
     gradient: "from-purple-500 to-pink-500",
-    smdesc :"Develop and deploy a production-style full-stack web application",
+    smdesc: "Develop and deploy a production-style full-stack web application",
   },
   {
     title: "Career Exposure",
     desc: "Understand professional development practices including agile workflows, code reviews, tooling ecosystems, and deployment pipelines, offering insight into how software is built and maintained in industry-grade environments.",
     gradient: "from-rose-500 to-red-500",
-    smdesc:"Understand professional development practices including agile workflows",
+    smdesc: "Understand professional development practices including agile workflows",
   },
 ];
 const render = [
-  {  icons :[
+  {
+    icons: [
       { Icon: TbCircleDashedLetterR, color: "text-blue-200" },
       { Icon: TbCircleDashedLetterE, color: "text-blue-200" },
       { Icon: TbCircleDashedLetterN, color: "text-blue-200" },
       { Icon: TbCircleDashedLetterD, color: "text-blue-200" },
       { Icon: TbCircleDashedLetterE, color: "text-blue-200" },
       { Icon: TbCircleDashedLetterR, color: "text-blue-200" },
-  ]
+    ]
   }
 ]
 
 
 const InfoSection = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <section className="relative  bg-transparent overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
@@ -129,60 +133,80 @@ const InfoSection = () => {
           </div>
         </div>
 
-        {/* ================= MOBILE SWIPE ================= */}
-        <div className="lg:hidden flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-6">
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="snap-center shrink-0 w-[85%]"
-            >
-              <div
-                className="
-                  w-full h-100
-                  rounded-3xl
-                  bg-white/10 backdrop-blur-2xl
-                  border border-white/20
-                  shadow-[0_20px_60px_rgba(0,0,0,0.5)]
-                "
+        {/* ================= STACKED MOBILE VIEW ================= */}
+        <div className="lg:hidden relative h-[420px] flex items-center justify-center">
+          {cards.map((card, index) => {
+            const isActive = index === activeIndex;
+
+            // Alternate rotation
+            const rotation = index % 2 === 0 ? 30 : -30;
+
+            return (
+              <motion.div
+                key={index}
+                onClick={() => setActiveIndex(index)}
+                initial={false}
+                animate={{
+                  rotate: isActive ? 0 : rotation,
+                  scale: isActive ? 1 : 0.9,
+                  x: isActive ? 0 : index * 5,
+                  y: isActive ? 0 : index * 5,
+                  zIndex: isActive ? 50 : cards.length - index,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 15,
+                }}
+                className="absolute w-[85%] cursor-pointer"
               >
                 <div
-                  className={`absolute inset-0 rounded-3xl 
-                  bg-gradient-to-br ${card.gradient}
-                  opacity-20 blur-[90px]`}
-                />
-
-                <div className="relative p-7 flex flex-col h-full">
-                  <h3 className="text-2xl font-semibold text-white mb-3">
-                    {card.title}
-                  </h3>
-
+                  className="
+            w-full h-100
+            rounded-3xl
+            bg-transparent/10 backdrop-blur-2xl
+            border border-white/20
+            shadow-[0_20px_60px_rgba(0,0,0,0.5)]
+          "
+                >
                   <div
-                    className={`h-1 w-14 rounded-full bg-gradient-to-r ${card.gradient}`}
+                    className={`absolute inset-0 rounded-3xl 
+            bg-linear-to-br ${card.gradient}
+            opacity-20 blur-[90px]`}
                   />
 
-                  {/* ICONS */}
-                  {card.icons && (
-                    <div className="flex flex-wrap gap-3 mt-4">
-                      {card.icons.map(({ Icon, color }, i) => (
-                        <div
-                          key={i}
-                          className="p-2.5 rounded-lg bg-white/10 border border-white/20"
-                        >
-                          <Icon className={`text-2xl ${color}`} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <div className="relative p-7 flex flex-col h-full">
+                    <h3 className="text-2xl font-semibold text-white text-center mb-3">
+                      {card.title}
+                    </h3>
 
-                  <p className="mt-4 text-[1rem] text-gray-300 leading-relaxed">
-                    {card.smdesc}
-                  </p>
+                    <div
+                      className={`h-1 w-full rounded-full bg-linear-to-r ${card.gradient}`}
+                    />
+
+                    {card.icons && (
+                      <div className="grid grid-cols-2 items-center  justify-center  gap-3 mt-4">
+                        {card.icons.map(({ Icon, color }, i) => (
+                          <div
+                            key={i}
+                            className="p-1.5 rounded-lg  flex   items-center  justify-center  bg-white/10 border border-white/20"
+                          >
+                            <Icon className={`text-2xl ${color}`} />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <p className="mt-4 text-[1rem] text-gray-300 leading-relaxed">
+                      {card.smdesc}
+                    </p>
+                  </div>
                 </div>
-
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
+
 
         {/* Hint */}
         <p className="mt-8 text-center text-gray-400 text-sm lg:hidden">
