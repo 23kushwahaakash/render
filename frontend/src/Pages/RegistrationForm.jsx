@@ -4,18 +4,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // In JS, we replace the Enum/Type import with a local constant
 const BRANCHES = [
-"AIML",
-"CSE" ,
-"CSE-H",
-"CSE AIML",
-"CSE DS",
-"CS",
-"CS IT",
-"EN",
-"ECE",
-"IT",
-"ME",
-"OTHER"
+  "AIML",
+  "CSE",
+  "CSE-H",
+  "CSE AIML",
+  "CSE DS",
+  "CS",
+  "CS IT",
+  "EN",
+  "ECE",
+  "IT",
+  "ME",
+  "OTHER"
 ];
 
 const RegistrationForm = () => {
@@ -25,8 +25,8 @@ const RegistrationForm = () => {
     phone: '',
     studentNumber: '',
     branch: '',
-    residence: '',     // NEW (Hostel / Dayscholar)
-    gender: ''         // NEW (Male / Female)
+    residence: '',
+    gender: ''
   });
 
 
@@ -124,6 +124,11 @@ const RegistrationForm = () => {
     setPaymentStatus('pending');
 
     try {
+      const payload = {
+        ...formData,
+      };
+
+      console.log(payload); // send this to backend
       // Mocking the backend response delay
       setTimeout(() => {
         const mockOrder = {
@@ -279,20 +284,29 @@ const RegistrationForm = () => {
             </label>
 
             <div className="flex gap-6">
-              {["Hosteller", "Dayscholar"].map((option) => (
-                <label key={option} className="flex items-center gap-2 text-white">
+              {[
+                { label: "Hosteller", value: true },
+                { label: "Dayscholar", value: false }
+              ].map((option) => (
+                <label key={option.label} className="flex items-center gap-2 text-white">
                   <input
                     type="radio"
                     name="residence"
-                    value={option}
-                    checked={formData.residence === option}
-                    onChange={handleInputChange}
+                    value={option.value}
+                    checked={formData.residence === option.value}
+                    onChange={(e) =>
+                      setFormData(prev => ({
+                        ...prev,
+                        residence: e.target.value === "true"
+                      }))
+                    }
                     className="accent-indigo-500"
                     required
                   />
-                  {option}
+                  {option.label}
                 </label>
               ))}
+
             </div>
           </div>
 

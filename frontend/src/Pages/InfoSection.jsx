@@ -27,7 +27,7 @@ const cards = [
     title: "Hands-on Project",
     desc: "Develop and deploy a production-style full-stack web application. The project emphasizes component-based architecture, state management, API integration, version control, and deployment workflows used in professional development environments.",
     gradient: "from-purple-500 to-pink-500",
-    smdesc: "Develop and deploy a production-style full-stack web application",
+    smdesc: "Develop and deploy a production-style FULL-STACK WEB APPLICATION",
   },
   {
     title: "Career Exposure",
@@ -54,7 +54,7 @@ const InfoSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="relative  bg-transparent overflow-hidden">
+    <section className="relative  bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl hidden font-bold text-white text-center lg:flex items-center justify-center gap-4 mb-16">
           {render[0].icons.map(({ Icon, color }, i) => (
@@ -134,7 +134,7 @@ const InfoSection = () => {
         </div>
 
         {/* ================= STACKED MOBILE VIEW ================= */}
-        <div className="lg:hidden relative h-[420px] flex items-center justify-center">
+        <div className="lg:hidden relative h-105 flex items-center justify-center">
           {cards.map((card, index) => {
             const isActive = index === activeIndex;
 
@@ -166,7 +166,6 @@ const InfoSection = () => {
             rounded-3xl
             bg-transparent/10 backdrop-blur-2xl
             border border-white/20
-            shadow-[0_20px_60px_rgba(0,0,0,0.5)]
           "
                 >
                   <div
@@ -176,7 +175,7 @@ const InfoSection = () => {
                   />
 
                   <div className="relative p-7 flex flex-col h-full">
-                    <h3 className="text-2xl font-semibold text-white text-center mb-3">
+                    <h3 className="text-3xl font-semibold text-white text-center mb-3">
                       {card.title}
                     </h3>
 
@@ -197,7 +196,7 @@ const InfoSection = () => {
                       </div>
                     )}
 
-                    <p className="mt-4 text-[1rem] text-gray-300 leading-relaxed">
+                    <p className="mt-4 text-xl text-center text-gray-300 leading-relaxed">
                       {card.smdesc}
                     </p>
                   </div>
@@ -207,11 +206,6 @@ const InfoSection = () => {
           })}
         </div>
 
-
-        {/* Hint */}
-        <p className="mt-8 text-center text-gray-400 text-sm lg:hidden">
-          Swipe to explore →
-        </p>
       </div>
     </section>
   );
