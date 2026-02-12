@@ -4,12 +4,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // In JS, we replace the Enum/Type import with a local constant
 const BRANCHES = [
-  "Computer Science",
-  "Information Technology",
-  "Electronics & Communication",
-  "Mechanical Engineering",
-  "Civil Engineering",
-  "Other"
+"AIML",
+"CSE" ,
+"CSE-H",
+"CSE AIML",
+"CSE DS",
+"CS",
+"CS IT",
+"EN",
+"ECE",
+"IT",
+"ME",
+"OTHER"
 ];
 
 const RegistrationForm = () => {
