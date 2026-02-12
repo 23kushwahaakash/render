@@ -18,8 +18,11 @@ const RegistrationForm = () => {
     email: '',
     phone: '',
     studentNumber: '',
-    branch: ''
+    branch: '',
+    residence: '',     // NEW (Hostel / Dayscholar)
+    gender: ''         // NEW (Male / Female)
   });
+
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,9 +36,14 @@ const RegistrationForm = () => {
       newErrors.name = 'Name is too short';
     }
 
-    if (formData.email && !formData.email.endsWith('@akgec.ac.in')) {
-      newErrors.email = 'Use your college email (@akgec.ac.in)';
+    if (
+      formData.email &&
+      !/^[a-zA-Z]+25\d+@akgec\.ac\.in$/.test(formData.email)
+    ) {
+      newErrors.email =
+        'Email must be in format: namestudentno@akgec.ac.in';
     }
+
 
     if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
       newErrors.phone = 'Enter a valid 10-digit phone number';
@@ -51,13 +59,16 @@ const RegistrationForm = () => {
   const isFormValid = useMemo(() => {
     return (
       formData.name.length >= 3 &&
-      formData.email.endsWith('@akgec.ac.in') &&
+      /^[a-zA-Z]+25\d+@akgec\.ac\.in$/.test(formData.email) &&
       /^\d{10}$/.test(formData.phone) &&
       /^25\d+$/.test(formData.studentNumber) &&
       formData.branch !== '' &&
+      formData.residence !== '' &&     // NEW
+      formData.gender !== '' &&        // NEW
       Object.keys(errors).length === 0
     );
   }, [formData, errors]);
+
 
   // Removed React.ChangeEvent type
   const handleInputChange = (e) => {
@@ -126,7 +137,7 @@ const RegistrationForm = () => {
 
   if (paymentStatus === 'success') {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-2xl mx-auto p-12 rounded-3xl bg-indigo-900/20 border border-indigo-500/30 text-center"
@@ -138,10 +149,10 @@ const RegistrationForm = () => {
         </div>
         <h2 className="text-3xl font-poppins font-bold text-white mb-4">Registration Successful!</h2>
         <p className="text-gray-400 mb-8">
-          Welcome aboard, <span className="text-white font-semibold">{formData.name}</span>. 
+          Welcome aboard, <span className="text-white font-semibold">{formData.name}</span>.
           A confirmation email has been sent to <span className="text-indigo-400">{formData.email}</span>.
         </p>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="text-indigo-400 font-semibold hover:underline"
         >
@@ -158,7 +169,7 @@ const RegistrationForm = () => {
         <p className="text-gray-400">Fill out the form accurately. Payment will be processed after form validation.</p>
       </div>
 
-      <motion.form 
+      <motion.form
         onSubmit={handleSubmit}
         className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-md shadow-2xl space-y-8"
       >
@@ -234,6 +245,52 @@ const RegistrationForm = () => {
               )}
             </AnimatePresence>
           </div>
+          <div className="space-y-2 md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-300 ml-1">
+              Gender
+            </label>
+
+            <div className="flex gap-6">
+              {["Male", "Female"].map((option) => (
+                <label key={option} className="flex items-center gap-2 text-white">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value={option}
+                    checked={formData.gender === option}
+                    onChange={handleInputChange}
+                    className="accent-indigo-500"
+                    required
+                  />
+                  {option}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-300 ml-1">
+              Residence
+            </label>
+
+            <div className="flex gap-6">
+              {["Hosteller", "Dayscholar"].map((option) => (
+                <label key={option} className="flex items-center gap-2 text-white">
+                  <input
+                    type="radio"
+                    name="residence"
+                    value={option}
+                    checked={formData.residence === option}
+                    onChange={handleInputChange}
+                    className="accent-indigo-500"
+                    required
+                  />
+                  {option}
+                </label>
+              ))}
+            </div>
+          </div>
+
+
 
           <div className="space-y-2 md:col-span-2">
             <label className="block text-sm font-semibold text-gray-300 ml-1">Branch</label>
@@ -261,11 +318,10 @@ const RegistrationForm = () => {
           <button
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className={`w-full md:w-auto px-10 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 ${
-              isFormValid && !isSubmitting
-                ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]'
-                : 'bg-gray-800 text-gray-500 cursor-not-allowed opacity-50'
-            }`}
+            className={`w-full md:w-auto px-10 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 ${isFormValid && !isSubmitting
+              ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]'
+              : 'bg-gray-800 text-gray-500 cursor-not-allowed opacity-50'
+              }`}
           >
             {isSubmitting ? (
               <>
