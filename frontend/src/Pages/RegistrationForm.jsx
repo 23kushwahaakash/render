@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import axios from 'axios'; 
 
-// In JS, we replace the Enum/Type import with a local constant
 const BRANCHES = [
   "AIML",
   "CSE",
@@ -36,31 +34,54 @@ const RegistrationForm = () => {
 
   // Real-time validation logic remains the same
   useEffect(() => {
-    const newErrors = {};
+  const newErrors = {};
 
-    if (formData.name && formData.name.length < 3) {
-      newErrors.name = 'Name is too short';
-    }
+  // Name
+  if (formData.name && formData.name.length < 3) {
+    newErrors.name = "Name is too short";
+  }
 
+  // Student Number Validation
+  if (formData.studentNumber) {
     if (
-      formData.email &&
-      !/^[a-zA-Z]+25\d+@akgec\.ac\.in$/.test(formData.email)
+      !/^25\d+$/.test(formData.studentNumber) || // must start with 25 & digits
+      formData.studentNumber.length >= 10       // must be less than 10 digits
     ) {
+      newErrors.studentNumber =
+        "Student number must start with 25 and be less than 10 digits";
+    }
+  }
+
+  // Email Validation + Match Student Number
+  if (formData.email) {
+    const emailRegex = /^([a-zA-Z]+)(25\d+)@akgec\.ac\.in$/;
+    const match = formData.email.match(emailRegex);
+
+    if (!match) {
       newErrors.email =
-        'Email must be in format: namestudentno@akgec.ac.in';
+        "Email must be like: name25xxxx@akgec.ac.in";
+    } else {
+      const emailStudentNumber = match[2];
+
+      if (
+        formData.studentNumber &&
+        emailStudentNumber !== formData.studentNumber
+      ) {
+        newErrors.email =
+          "Student number in email must match Student Number field";
+      }
     }
+  }
+
+  // Phone
+  if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+    newErrors.phone = "Enter a valid 10-digit phone number";
+  }
+
+  setErrors(newErrors);
+}, [formData]);
 
 
-    if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = 'Enter a valid 10-digit phone number';
-    }
-
-    if (formData.studentNumber && !/^25\d+$/.test(formData.studentNumber)) {
-      newErrors.studentNumber = 'Must start with 25 and contain only digits';
-    }
-
-    setErrors(newErrors);
-  }, [formData]);
 
   const isFormValid = useMemo(() => {
     return (
