@@ -54,7 +54,7 @@ const InfoSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="relative  bg-transparent">
+    <section className="relative overflow-hidden bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl hidden font-bold text-white text-center lg:flex items-center justify-center gap-4 mb-16">
           {render[0].icons.map(({ Icon, color }, i) => (
