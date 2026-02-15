@@ -1,16 +1,207 @@
-# React + Vite
+# 🚀 CSI Render 4.0 – Official Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, high-performance event website built for **CSI AKGEC Render 4.0**.
 
-Currently, two official plugins are available:
+Built using **React 19 + Vite + Tailwind CSS v4**, featuring smooth animations, mobile-first design, and premium UI interactions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* 🎨 Apple-style smooth UI
+* 📱 Fully responsive (Mobile + Desktop)
+* 🎠 Premium mobile carousel (Swiper.js – centered mode)
+* ⚡ Smooth animations (Framer Motion)
+* 🔄 Auto-slide + drag momentum
+* 🧭 React Router based navigation
+* 📜 Privacy, Refund & Terms pages
+* 📝 Registration form section with smooth scroll
+* 🌈 Glassmorphism + Gradient UI
+* 🚀 Optimized build using Vite
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠 Tech Stack
+
+| Technology              | Purpose                   |
+| ----------------------- | ------------------------- |
+| **React 19**            | Frontend framework        |
+| **Vite 7**              | Fast bundler & dev server |
+| **Tailwind CSS v4**     | Utility-first styling     |
+| **Framer Motion**       | Animations                |
+| **Swiper.js**           | Mobile premium carousel   |
+| **React Router DOM v7** | Routing                   |
+| **Axios**               | API requests              |
+| **React Icons**         | Icon library              |
+| **ESLint**              | Code quality              |
+
+---
+
+## 📂 Project Structure
+
+```
+frontend/
+│
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   ├── CardCarousel.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── Footer.jsx
+│   │   ├── PrivacyPolicy.jsx
+│   │   ├── RefundPolicy.jsx
+│   │   ├── TermsAndConditions.jsx
+│   │   └── ThreeDLogo.jsx
+│   │
+│   ├── Pages/
+│   │   ├── Hero.jsx
+│   │   ├── InfoSection.jsx
+│   │   ├── RegistrationForm.jsx
+│   │   └── ContactUs.jsx
+│   │
+│   ├── App.jsx
+│   ├── AppRoutes.jsx
+│   ├── main.jsx
+│   └── index.css
+│
+├── package.json
+└── vite.config.js
+```
+
+---
+
+## 🧑‍💻 Getting Started
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone <your-repository-url>
+cd frontend
+```
+
+---
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+### 3️⃣ Start Development Server
+
+```bash
+npm run dev
+```
+
+App runs on:
+
+```
+http://localhost:5173
+```
+
+---
+
+### 4️⃣ Build for Production
+
+```bash
+npm run build
+```
+
+---
+
+### 5️⃣ Preview Production Build
+
+```bash
+npm run preview
+```
+
+---
+
+## 🧭 Routing Structure
+
+| Route             | Page               |
+| ----------------- | ------------------ |
+| `/`               | Landing Page       |
+| `/privacy-policy` | Privacy Policy     |
+| `/refund-policy`  | Refund Policy      |
+| `/terms`          | Terms & Conditions |
+| `/contact-us`     | Contact Page       |
+
+---
+
+## 🎠 Carousel Implementation
+
+Mobile carousel is built using **Swiper.js v12** with:
+
+* `centeredSlides`
+* `loop`
+* `autoplay`
+* `grabCursor`
+* Momentum drag
+* Active slide scaling
+* Partial side slide visibility
+
+Desktop uses a custom advanced animated layout.
+
+---
+
+## 🎨 UI Highlights
+
+* Glassmorphism cards
+* Gradient glow effects
+* Radial background lighting
+* Sticky animated navbar
+* Smooth scroll to registration section
+* Scroll-based navbar background transition
+
+---
+
+## 📦 Available Scripts
+
+```bash
+npm run dev       # Start dev server
+npm run build     # Production build
+npm run preview   # Preview build
+npm run lint      # Run ESLint
+```
+
+---
+
+## 🛡 Code Quality
+
+* ESLint configured
+* React Hooks rules enforced
+* Vite optimized bundling
+* Modern ES Modules
+
+---
+
+## 🌍 Deployment
+
+This project can be deployed easily on:
+
+* Vercel
+* Netlify
+* Firebase Hosting
+* Render
+
+If deploying on Vercel/Netlify, ensure SPA fallback is enabled.
+
+---
+
+## 👨‍💻 Developed By
+
+**CSI AKGEC Tech Team**
+
+Made with 💙 by CSI Members.
+
+---
+
+## 📄 License
+
+This project is private and intended for CSI AKGEC internal use.
+
+

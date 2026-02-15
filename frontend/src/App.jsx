@@ -1,46 +1,30 @@
-import React, { useRef } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './Pages/Hero';
-import InfoSection from './Pages/InfoSection';
-import RegistrationForm from './Pages/RegistrationForm';
-import Footer from './components/Footer';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+import AppRoutes from "./AppRoutes";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import RefundPolicy from "./components/RefundPolicy";
+import TermsAndConditions from "./components/TermsAndConditions";
+import ContactUs from "./Pages/ContactUs";
 
 const App = () => {
-  // In JS, we don't need to specify the HTML element type
-  const registerRef = useRef(null);
-
-  const scrollToRegister = () => {
-    // Optional chaining (?.) still works in modern JS
-    registerRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <div className="min-h-screen overflow-x-hidden selection:bg-[indigo-500] selection:text-white">
-      {/* Background radial gradients for atmosphere */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-900/20 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full"></div>
-      </div>
+    <>
+      <Navbar />
 
-      <div className="relative z-10">
-        <Navbar onRegisterClick={scrollToRegister} />
-        
-        <main>
-          <Hero onCtaClick={scrollToRegister} />
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-24">
-            <InfoSection />
-           
-            
-            <div ref={registerRef} className="pt-16">
-              <RegistrationForm />
-            </div>
-          </div>
-        </main>
+      <Routes>
+        <Route path="/" element={<AppRoutes />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+      </Routes>
 
-        <Footer />
-      </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
