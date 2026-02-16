@@ -3,9 +3,9 @@
 
 export default function TermsAndConditions() {
   return (
-    <div className="min-h-screen bg-[#f1eaff] py-10 px-4 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent mt-10 py-10 px-4 flex items-center justify-center">
       <div className="bg-[#b2e0ff] max-w-4xl w-full p-8 rounded-2xl shadow-xl">
-        <h1 className="text-2xl font-semibold text-center mb-6">Terms and Conditions</h1>
+        <h1 className="text-2xl font-semibold text-black  text-center mb-6">Terms and Conditions</h1>
 
         <div className="space-y-4 text-black">
           <div>

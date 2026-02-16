@@ -353,7 +353,7 @@ const RegistrationForm = () => {
         <div className="pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <div className="text-2xl font-poppins font-bold text-white">₹100</div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Non-refundable <br /> Registration Fee</div>
+            <div className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Place Your Spot <br /> Registration Fee</div>
           </div>
 
           <button

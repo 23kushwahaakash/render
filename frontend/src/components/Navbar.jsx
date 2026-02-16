@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import CSI from '../assets/CSI.png'
 // Removed NavbarProps interface and React.FC type
-const Navbar = ({ onRegisterClick }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,7 +41,7 @@ const Navbar = ({ onRegisterClick }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-10 rounded-full flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <span className="text-white font-bold text-xl"><img className="rounded-full " src={CSI} alt="" /></span>
+            <span className="text-white font-bold cursor-pointer text-xl" onClick={()=>{navigate("/");}}><img className="rounded-full " src={CSI} alt="" /></span>
           </div>
           <span className="font-poppins font-bold text-lg hidden sm:block tracking-tight">
             RENDER <span className="text-indigo-400">4.0</span>

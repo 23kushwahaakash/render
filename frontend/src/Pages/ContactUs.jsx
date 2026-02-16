@@ -2,9 +2,9 @@
 
 export default function ContactUs() {
   return (
-    <div className="min-h-screen bg-[#f1eaff] py-10 px-4 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent mt-10  py-10 px-4 flex items-center justify-center">
       <div className="bg-[#b2e0ff] max-w-4xl w-full p-8 rounded-2xl shadow-xl">
-        <h1 className="text-2xl font-semibold text-center mb-6">Contact Us</h1>
+        <h1 className="text-2xl font-semibold text-center text-black mb-6">Contact Us</h1>
 
         <div className="space-y-6 text-black">
           <p className="text-center">
