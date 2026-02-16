@@ -9,6 +9,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 import RefundPolicy from "./components/RefundPolicy";
 import TermsAndConditions from "./components/TermsAndConditions";
 import ContactUs from "./Pages/ContactUs";
+import OtpVerification from "./Pages/OtpVerification";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/verify-otp" element={<OtpVerification />} />
       </Routes>
 
       <Footer />
