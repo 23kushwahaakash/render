@@ -21,7 +21,7 @@ const Footer = () => {
             <p className="text-gray-400 flex items-center justify-center text-sm mb-4 gap-1">
               Contact us at: <FaInstagram></FaInstagram> <a href="https://www.instagram.com/csi_akgec/" className="text-indigo-400 hover:underline">CSI AKGEC</a>
             </p>
-            <div className="flex gap-6 text-sm justify-center md:justify-end mt-4">
+            <div className="flex flex-wrap items-center gap-3 py-3 text-sm justify-center md:justify-end mt-4">
               <Link to="/privacy-policy" className="text-gray-400 hover:text-indigo-400 transition">
                 Privacy Policy
               </Link>
