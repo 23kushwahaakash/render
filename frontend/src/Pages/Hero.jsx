@@ -18,7 +18,7 @@ const Hero = ({ onCtaClick }) => {
             RENDER 4.0 <br />
             <ThreeDLogo/>
           </h1>
-          <p className="text-gray-400 p-2 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-gray-400 p-3 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
             Workshop  curated  for Developers  - HTML CSS JS & REACT.js
           </p>
           
