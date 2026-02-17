@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const BRANCHES = [
   "AIML",
@@ -20,6 +21,7 @@ const BRANCHES = [
 
 const RegistrationForm = () => {
   const baseUrl = (import.meta.env.VITE_BASE_URL || "").replace(/\/+$/, "");
+  const OTP_REQUEST_TIMEOUT_MS = 120000;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -105,6 +107,9 @@ const RegistrationForm = () => {
         `${baseUrl}/api/users/send-otp/`,
         {
           "email": formData.email.trim().toLowerCase(),
+        },
+        {
+          timeout: OTP_REQUEST_TIMEOUT_MS,
         }
       );
 
@@ -115,14 +120,16 @@ const RegistrationForm = () => {
       } 
     } catch (error) {
       console.log(error);
-      if (error.response) {
-        alert(
+      if (error.code === "ECONNABORTED") {
+        toast.error("Request timed out. Please respond after sometime.");
+      } else if (error.response) {
+        toast.error(
           error.response.data.message ||
             error.response.data.detail ||
             "OTP sending failed"
         );
       } else {
-        alert("Server not reachable");
+        toast.error("Server not reachable");
       }
     } finally {
       setIsSubmitting(false);

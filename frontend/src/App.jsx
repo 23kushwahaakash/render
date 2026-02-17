@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -24,6 +25,13 @@ const App = () => {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/verify-otp" element={<OtpVerification />} />
       </Routes>
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+        }}
+      />
 
       <Footer />
     </>
