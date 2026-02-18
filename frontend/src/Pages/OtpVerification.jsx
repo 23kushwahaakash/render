@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const OtpVerification = () => {
   const baseUrl = (import.meta.env.VITE_BASE_URL || "").replace(/\/+$/, "");
@@ -24,25 +25,25 @@ const OtpVerification = () => {
       const status = statusResponse.data?.payment_status;
 
       if (status === "SUCCESS") {
-        alert("Payment successful. Registration completed.");
+        toast.success("Payment successful. Registration completed.");
         navigate("/");
         return;
       }
 
       if (status === "FAILED") {
-        alert("Payment failed. Please try again.");
+        toast.error("Payment failed. Please try again.");
         return;
       }
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
-    alert("Payment is still processing. Please check status again in a moment.");
+    toast("Payment is still processing. Please check status again in a moment.");
   };
 
   const openRazorpayCheckout = (order, studentId) => {
     if (!window.Razorpay) {
-      alert("Razorpay SDK not loaded");
+      toast.error("Razorpay SDK not loaded");
       return;
     }
 
@@ -89,6 +90,7 @@ const OtpVerification = () => {
     if (!recaptchaSiteKey || !window.grecaptcha?.execute) {
       throw new Error("reCAPTCHA is not configured on frontend");
     }
+    console.log("RECAPTCHA INTIATED")
 
     return window.grecaptcha.execute(recaptchaSiteKey, {
       action: "payment_initiation",
@@ -107,19 +109,21 @@ const OtpVerification = () => {
         phone: state.phone,
         student_number: state.studentNumber,
         branch: state.branch,
-        residence: state.residence,
+        hostler: state.residence,
         gender: state.gender,
         otp,
       };
+      console.log(verifyPayload);
 
       const verifyResponse = await axios.post(
-        `${baseUrl}/verify-otp/`,
+        `${baseUrl}/api/users/verify-otp/`,
         verifyPayload
       );
+      console.log(verifyResponse.data.id)
 
       const studentId = verifyResponse.data?.id;
       if (!studentId) {
-        alert("Student ID not returned after OTP verification");
+        toast.error("Student ID not returned after OTP verification");
         return;
       }
 
@@ -137,13 +141,13 @@ const OtpVerification = () => {
       openRazorpayCheckout(paymentInitResponse.data, studentId);
     } catch (error) {
       if (error.response) {
-        alert(
+        toast.error(
           error.response.data?.message ||
             error.response.data?.detail ||
             "OTP or payment initiation failed"
         );
       } else {
-        alert("Server not reachable");
+        toast.error("Server not reachable");
       }
       setIsPaying(false);
       setStatusText("");
@@ -205,3 +209,4 @@ const OtpVerification = () => {
 };
 
 export default OtpVerification;
+
