@@ -7,16 +7,16 @@ import { toast } from "react-hot-toast";
 const BRANCHES = [
   "AIML",
   "CSE",
-  "CSE-H",
-  "CSE AIML",
-  "CSE DS",
+  "CSE-AIML",
+  "CSE-DS",
   "CS",
-  "CS IT",
+  "CS-HINDI",
+  "CS-IT",
+  "CIVIL",
   "EN",
   "ECE",
   "IT",
   "ME",
-  "OTHER",
 ];
 
 const RegistrationForm = () => {
@@ -273,7 +273,7 @@ const RegistrationForm = () => {
               Gender
             </label>
             <div className="flex gap-6">
-              {["Male", "Female"].map((option) => (
+              {["MALE", "FEMALE"].map((option) => (
                 <label key={option} className="flex items-center gap-2 text-white">
                   <input
                     type="radio"

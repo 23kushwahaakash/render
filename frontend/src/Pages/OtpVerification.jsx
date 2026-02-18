@@ -90,6 +90,7 @@ const OtpVerification = () => {
     if (!recaptchaSiteKey || !window.grecaptcha?.execute) {
       throw new Error("reCAPTCHA is not configured on frontend");
     }
+    console.log("RECAPTCHA INTIATED")
 
     return window.grecaptcha.execute(recaptchaSiteKey, {
       action: "payment_initiation",
@@ -108,15 +109,17 @@ const OtpVerification = () => {
         phone: state.phone,
         student_number: state.studentNumber,
         branch: state.branch,
-        residence: state.residence,
+        hostler: state.residence,
         gender: state.gender,
         otp,
       };
+      console.log(verifyPayload);
 
       const verifyResponse = await axios.post(
-        `${baseUrl}/verify-otp/`,
+        `${baseUrl}/api/users/verify-otp/`,
         verifyPayload
       );
+      console.log(verifyResponse.data.id)
 
       const studentId = verifyResponse.data?.id;
       if (!studentId) {
@@ -206,3 +209,4 @@ const OtpVerification = () => {
 };
 
 export default OtpVerification;
+
