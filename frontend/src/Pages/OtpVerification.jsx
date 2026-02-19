@@ -103,15 +103,13 @@ const OtpVerification = () => {
     return token ;
   };
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
+  const handleVerify = async () => {
     if (!otp || otp.length < 4) {
       toast.error("Enter a valid OTP.");
       return;
     }
     if (!state) {
       toast.error("Session expired. Please start registration again.");
-      navigate("/");
       return;
     }
 
@@ -200,7 +198,13 @@ const OtpVerification = () => {
           Enter the OTP sent to <span className="text-indigo-300">{email}</span>.
         </p>
 
-        <form onSubmit={handleVerify} className="space-y-6">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleVerify();
+          }}
+          className="space-y-6"
+        >
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-300 ml-1">
               OTP Code
@@ -222,7 +226,8 @@ const OtpVerification = () => {
           )}
 
           <button
-            type="submit"
+            type="button"
+            onClick={handleVerify}
             disabled={isVerifying || isPaying || !state}
             className={`w-full px-10 py-4 rounded-2xl font-bold transition-all ${isVerifying || isPaying || !state
                 ? "bg-gray-800 text-gray-500 cursor-not-allowed opacity-50"
