@@ -87,14 +87,20 @@ const OtpVerification = () => {
   };
 
   const getRecaptchaToken = async () => {
-    if (!recaptchaSiteKey || !window.grecaptcha?.execute) {
-      throw new Error("reCAPTCHA is not configured on frontend");
+    if (!window.grecaptcha) {
+      toast.error("Captcha not loaded. Refresh page.");
+      return;
     }
-    console.log("RECAPTCHA INTIATED")
 
-    return window.grecaptcha.execute(recaptchaSiteKey, {
-      action: "payment_initiation",
-    });
+    const token = await new Promise((resolve, reject) => {
+      window.grecaptcha.ready(() => {
+        window.grecaptcha
+          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "payment_initialization" })
+          .then(resolve)
+          .catch(reject);
+      });
+    })
+    return token ;
   };
 
   const handleVerify = async (e) => {
@@ -106,7 +112,7 @@ const OtpVerification = () => {
     const token = await new Promise((resolve, reject) => {
       window.grecaptcha.ready(() => {
         window.grecaptcha
-          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "send_otp" })
+          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "verify_otp" })
           .then(resolve)
           .catch(reject);
       });
@@ -147,7 +153,7 @@ const OtpVerification = () => {
       setStatusText("Creating payment order...");
       const recaptchaToken = await getRecaptchaToken();
       const paymentInitResponse = await axios.post(
-        `${baseUrl}/payment-initiation/`,
+        `${baseUrl}/api/users/payment-initiation/`,
         {
           student_id: studentId,
           recaptcha_token: recaptchaToken,
