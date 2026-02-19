@@ -35,6 +35,7 @@ const OtpVerification = () => {
         }
 
       );
+      console.log(statusResponse);
       const status = statusResponse.data?.payment_status;
 
       if (status === "SUCCESS") {
