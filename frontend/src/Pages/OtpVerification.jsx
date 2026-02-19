@@ -20,7 +20,7 @@ const OtpVerification = () => {
   const pollPaymentStatus = async (studentId) => {
     for (let i = 0; i < 10; i += 1) {
       const statusResponse = await axios.get(
-        `${baseUrl}/payment-status/${studentId}/`
+        `${baseUrl}/api/user/payment-status/${studentId}/`
       );
       const status = statusResponse.data?.payment_status;
 
