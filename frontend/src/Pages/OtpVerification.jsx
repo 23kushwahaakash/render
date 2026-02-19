@@ -98,6 +98,20 @@ const OtpVerification = () => {
   };
 
   const handleVerify = async (e) => {
+    if (!window.grecaptcha) {
+      toast.error("Captcha not loaded. Refresh page.");
+      return;
+    }
+
+    const token = await new Promise((resolve, reject) => {
+      window.grecaptcha.ready(() => {
+        window.grecaptcha
+          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "send_otp" })
+          .then(resolve)
+          .catch(reject);
+      });
+    });
+
     e.preventDefault();
     if (!otp || otp.length < 4 || !state) return;
 
@@ -112,6 +126,7 @@ const OtpVerification = () => {
         hostler: state.residence,
         gender: state.gender,
         otp,
+        token:token
       };
       console.log(verifyPayload);
 
@@ -143,8 +158,8 @@ const OtpVerification = () => {
       if (error.response) {
         toast.error(
           error.response.data?.message ||
-            error.response.data?.detail ||
-            "OTP or payment initiation failed"
+          error.response.data?.detail ||
+          "OTP or payment initiation failed"
         );
       } else {
         toast.error("Server not reachable");
@@ -194,11 +209,10 @@ const OtpVerification = () => {
           <button
             type="submit"
             disabled={isVerifying || isPaying || !state}
-            className={`w-full px-10 py-4 rounded-2xl font-bold transition-all ${
-              isVerifying || isPaying || !state
+            className={`w-full px-10 py-4 rounded-2xl font-bold transition-all ${isVerifying || isPaying || !state
                 ? "bg-gray-800 text-gray-500 cursor-not-allowed opacity-50"
                 : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]"
-            }`}
+              }`}
           >
             {isVerifying ? "VERIFYING OTP..." : isPaying ? "OPENING PAYMENT..." : "VERIFY OTP"}
           </button>
