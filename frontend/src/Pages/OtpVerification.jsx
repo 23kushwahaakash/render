@@ -126,7 +126,7 @@ const OtpVerification = () => {
         hostler: state.residence,
         gender: state.gender,
         otp:otp,
-        token:token
+        recaptcha_token:token
       };
       console.log(verifyPayload);
 
@@ -135,7 +135,7 @@ const OtpVerification = () => {
         verifyPayload
       );
 
-      console.log(verifyResponse.data.id)
+      console.log(verifyResponse);
 
       const studentId = verifyResponse.data?.id;
       if (!studentId) {
