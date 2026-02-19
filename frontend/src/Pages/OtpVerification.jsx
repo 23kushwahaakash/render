@@ -28,24 +28,31 @@ const OtpVerification = () => {
         }
 
       );
-      console.log(statusResponse);
       const status = statusResponse.data?.payment_status;
 
       if (status === "SUCCESS") {
-        toast.success("Payment successful. Registration completed.");
-        navigate("/");
-        return;
+        return "SUCCESS";
       }
 
       if (status === "FAILED") {
-        toast.error("Payment failed. Please try again.");
-        return;
+        return "FAILED";
       }
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
-    toast("Payment is still processing. Please check status again in a moment.");
+    return "PENDING";
+  };
+
+  const navigateToSuccess = (studentId) => {
+    navigate("/registration-success", {
+      state: {
+        studentId,
+        name: state?.name || "",
+        email: state?.email || "",
+        paymentStatus: "SUCCESS",
+      },
+    });
   };
 
   const openRazorpayCheckout = (order, studentId) => {
@@ -69,7 +76,17 @@ const OtpVerification = () => {
       handler: async () => {
         setStatusText("Verifying payment status...");
         try {
-          await pollPaymentStatus(studentId);
+          const finalStatus = await pollPaymentStatus(studentId);
+          if (finalStatus === "SUCCESS") {
+            toast.success("Payment successful. Registration completed.");
+            navigateToSuccess(studentId);
+            return;
+          }
+          if (finalStatus === "FAILED") {
+            toast.error("Payment failed. Please try again.");
+            return;
+          }
+          toast("Payment is still processing. Please check status again in a moment.");
         } catch (error) {
           toast.error(
             error.response?.data?.detail ||
@@ -95,7 +112,17 @@ const OtpVerification = () => {
     rzp.on("payment.failed", async () => {
       setStatusText("Checking payment status...");
       try {
-        await pollPaymentStatus(studentId);
+        const finalStatus = await pollPaymentStatus(studentId);
+        if (finalStatus === "SUCCESS") {
+          toast.success("Payment successful. Registration completed.");
+          navigateToSuccess(studentId);
+          return;
+        }
+        if (finalStatus === "FAILED") {
+          toast.error("Payment failed. Please try again.");
+          return;
+        }
+        toast("Payment is still processing. Please check status again in a moment.");
       } catch (error) {
         toast.error(
           error.response?.data?.detail ||
@@ -169,8 +196,6 @@ const OtpVerification = () => {
         verifyPayload
       );
 
-      console.log(verifyResponse.data.id);
-
       const studentId = verifyResponse.data?.id;
       if (!studentId) {
         toast.error("Student ID not returned after OTP verification");
@@ -180,7 +205,6 @@ const OtpVerification = () => {
       setIsPaying(true);
       setStatusText("Creating payment order...");
       const recaptchaToken = await getRecaptchaToken("payment_initiation");
-      console.log(recaptchaToken) ;
       const paymentInitResponse = await axios.post(
         `${baseUrl}/api/users/payment-initiation/`,
         {
