@@ -104,25 +104,32 @@ const OtpVerification = () => {
   };
 
   const handleVerify = async (e) => {
-    if (!window.grecaptcha) {
-      toast.error("Captcha not loaded. Refresh page.");
+    e.preventDefault();
+    if (!otp || otp.length < 4) {
+      toast.error("Enter a valid OTP.");
+      return;
+    }
+    if (!state) {
+      toast.error("Session expired. Please start registration again.");
+      navigate("/");
       return;
     }
 
-    const token = await new Promise((resolve, reject) => {
-      window.grecaptcha.ready(() => {
-        window.grecaptcha
-          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "verify_otp" })
-          .then(resolve)
-          .catch(reject);
-      });
-    });
-
-    e.preventDefault();
-    if (!otp || otp.length < 4 || !state) return;
-
     setIsVerifying(true);
     try {
+      if (!window.grecaptcha) {
+        throw new Error("Captcha not loaded. Refresh page.");
+      }
+
+      const token = await new Promise((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha
+            .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "verify_otp" })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+
       const verifyPayload = {
         name: state.name,
         email: state.email.trim().toLowerCase(),
@@ -131,8 +138,8 @@ const OtpVerification = () => {
         branch: state.branch,
         hostler: state.residence,
         gender: state.gender,
-        otp:otp,
-        recaptcha_token:token
+        otp: otp,
+        recaptcha_token: token,
       };
       console.log(verifyPayload);
 
