@@ -125,7 +125,7 @@ const OtpVerification = () => {
         branch: state.branch,
         hostler: state.residence,
         gender: state.gender,
-        otp,
+        otp:otp,
         token:token
       };
       console.log(verifyPayload);
@@ -134,6 +134,7 @@ const OtpVerification = () => {
         `${baseUrl}/api/users/verify-otp/`,
         verifyPayload
       );
+
       console.log(verifyResponse.data.id)
 
       const studentId = verifyResponse.data?.id;
@@ -155,6 +156,7 @@ const OtpVerification = () => {
 
       openRazorpayCheckout(paymentInitResponse.data, studentId);
     } catch (error) {
+      console.log(error);
       if (error.response) {
         toast.error(
           error.response.data?.message ||
