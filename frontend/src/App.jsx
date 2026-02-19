@@ -11,6 +11,7 @@ import RefundPolicy from "./components/RefundPolicy";
 import TermsAndConditions from "./components/TermsAndConditions";
 import ContactUs from "./Pages/ContactUs";
 import OtpVerification from "./Pages/OtpVerification";
+import NotFound from "./Pages/NotFound";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/verify-otp" element={<OtpVerification />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Toaster
