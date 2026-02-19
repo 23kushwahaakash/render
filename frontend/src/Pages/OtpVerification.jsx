@@ -28,7 +28,7 @@ const OtpVerification = () => {
       });
     for (let i = 0; i < 10; i += 1) {
       const statusResponse = await axios.post(
-        `${baseUrl}/api/user/payment-status/`,
+        `${baseUrl}/api/users/payment-status/`,
         {
           student_id : studentId ,
           recaptcha_token:token ,
