@@ -135,7 +135,7 @@ const OtpVerification = () => {
         verifyPayload
       );
 
-      console.log(verifyResponse.data.id)
+      console.log(verifyResponse);
 
       const studentId = verifyResponse.data?.id;
       if (!studentId) {
