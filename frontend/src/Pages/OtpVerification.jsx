@@ -18,9 +18,22 @@ const OtpVerification = () => {
   const email = state?.email || "your email";
 
   const pollPaymentStatus = async (studentId) => {
+    const token = await new Promise((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha
+            .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "payment_status" })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
     for (let i = 0; i < 10; i += 1) {
-      const statusResponse = await axios.get(
-        `${baseUrl}/api/user/payment-status/${studentId}/`
+      const statusResponse = await axios.post(
+        `${baseUrl}/api/user/payment-status/`,
+        {
+          student_id : studentId ,
+          recaptcha_token:token ,
+        }
+
       );
       const status = statusResponse.data?.payment_status;
 
