@@ -146,7 +146,7 @@ const OtpVerification = () => {
         verifyPayload
       );
 
-      console.log(verifyResponse);
+      console.log(verifyResponse.data.id);
 
       const studentId = verifyResponse.data?.id;
       if (!studentId) {
@@ -198,13 +198,7 @@ const OtpVerification = () => {
           Enter the OTP sent to <span className="text-indigo-300">{email}</span>.
         </p>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleVerify();
-          }}
-          className="space-y-6"
-        >
+        <div className="space-y-6">
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-300 ml-1">
               OTP Code
@@ -236,7 +230,7 @@ const OtpVerification = () => {
           >
             {isVerifying ? "VERIFYING OTP..." : isPaying ? "OPENING PAYMENT..." : "VERIFY OTP"}
           </button>
-        </form>
+        </div>
       </motion.div>
     </div>
   );
