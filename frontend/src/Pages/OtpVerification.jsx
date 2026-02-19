@@ -157,6 +157,7 @@ const OtpVerification = () => {
       setIsPaying(true);
       setStatusText("Creating payment order...");
       const recaptchaToken = await getRecaptchaToken();
+      console.log(recaptchaToken) ;
       const paymentInitResponse = await axios.post(
         `${baseUrl}/api/users/payment-initiation/`,
         {
