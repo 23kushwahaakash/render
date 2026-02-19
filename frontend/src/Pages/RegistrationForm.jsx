@@ -19,6 +19,14 @@ const BRANCHES = [
   "ME",
 ];
 
+const normalizePhoneNumber = (value) => {
+  const digits = (value || "").replace(/\D/g, "");
+  if (digits.length === 11 && digits.startsWith("0")) {
+    return digits.slice(1);
+  }
+  return digits;
+};
+
 const RegistrationForm = () => {
   const baseUrl = (import.meta.env.VITE_BASE_URL || "").replace(/\/+$/, "");
   const OTP_REQUEST_TIMEOUT_MS = 120000;
@@ -39,7 +47,7 @@ const RegistrationForm = () => {
     const newErrors = {};
 
 
-    if (formData.name && formData.name.length < 3) {
+    if (formData.name && formData.name.length < 2) {
       newErrors.name = "Name is too short";
     }
 
@@ -72,7 +80,8 @@ const RegistrationForm = () => {
       }
     }
 
-    if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+    const normalizedPhone = normalizePhoneNumber(formData.phone);
+    if (formData.phone && !/^\d{10}$/.test(normalizedPhone)) {
       newErrors.phone = "Enter a valid 10-digit phone number";
     }
 
@@ -81,9 +90,9 @@ const RegistrationForm = () => {
 
   const isFormValid = useMemo(() => {
     return (
-      formData.name.length >= 3 &&
+      formData.name.length >= 2 &&
       /^[a-zA-Z]+25\d+@akgec\.ac\.in$/.test(formData.email) &&
-      /^\d{10}$/.test(formData.phone) &&
+      /^\d{10}$/.test(normalizePhoneNumber(formData.phone)) &&
       /^25\d+$/.test(formData.studentNumber) &&
       formData.branch !== "" &&
       formData.residence !== "" &&
@@ -129,7 +138,17 @@ const RegistrationForm = () => {
       
 
       if (response.data.success) {
-        navigate("/verify-otp", { state: formData });
+        const normalizedEmail = formData.email.trim().toLowerCase();
+        const normalizedPhone = normalizePhoneNumber(formData.phone);
+        sessionStorage.setItem("otp_flow_email", normalizedEmail);
+        sessionStorage.setItem("otp_flow_started_at", String(Date.now()));
+        sessionStorage.removeItem("payment_success_gate");
+        navigate("/verify-otp", {
+          state: {
+            ...formData,
+            phone: normalizedPhone,
+          },
+        });
       }
 
     } catch (error) {
