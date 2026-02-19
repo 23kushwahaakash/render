@@ -18,15 +18,8 @@ const OtpVerification = () => {
   const email = state?.email || "your email";
 
   const pollPaymentStatus = async (studentId) => {
-    const token = await new Promise((resolve, reject) => {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha
-            .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "payment_status" })
-            .then(resolve)
-            .catch(reject);
-        });
-      });
     for (let i = 0; i < 10; i += 1) {
+      const token = await getRecaptchaToken("payment_status");
       const statusResponse = await axios.post(
         `${baseUrl}/api/users/payment-status/`,
         {
@@ -75,7 +68,15 @@ const OtpVerification = () => {
       },
       handler: async () => {
         setStatusText("Verifying payment status...");
-        await pollPaymentStatus(studentId);
+        try {
+          await pollPaymentStatus(studentId);
+        } catch (error) {
+          toast.error(
+            error.response?.data?.detail ||
+            error.response?.data?.message ||
+            "Payment status check failed"
+          );
+        }
         setStatusText("");
         setIsPaying(false);
       },
@@ -93,23 +94,31 @@ const OtpVerification = () => {
     const rzp = new window.Razorpay(options);
     rzp.on("payment.failed", async () => {
       setStatusText("Checking payment status...");
-      await pollPaymentStatus(studentId);
+      try {
+        await pollPaymentStatus(studentId);
+      } catch (error) {
+        toast.error(
+          error.response?.data?.detail ||
+          error.response?.data?.message ||
+          "Payment status check failed"
+        );
+      }
       setStatusText("");
       setIsPaying(false);
     });
     rzp.open();
   };
 
-  const getRecaptchaToken = async () => {
+  const getRecaptchaToken = async (action) => {
     if (!window.grecaptcha) {
       toast.error("Captcha not loaded. Refresh page.");
-      return;
+      throw new Error("Captcha not loaded");
     }
 
     const token = await new Promise((resolve, reject) => {
       window.grecaptcha.ready(() => {
         window.grecaptcha
-          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "payment_initiation" })
+          .execute(recaptchaSiteKey, { action })
           .then(resolve)
           .catch(reject);
       });
@@ -170,7 +179,7 @@ const OtpVerification = () => {
 
       setIsPaying(true);
       setStatusText("Creating payment order...");
-      const recaptchaToken = await getRecaptchaToken();
+      const recaptchaToken = await getRecaptchaToken("payment_initiation");
       console.log(recaptchaToken) ;
       const paymentInitResponse = await axios.post(
         `${baseUrl}/api/users/payment-initiation/`,
