@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import csiLogo from "../assets/CSI.png";
 
 const OtpVerification = () => {
   const baseUrl = (import.meta.env.VITE_BASE_URL || "").replace(/\/+$/, "");
@@ -94,6 +95,7 @@ const OtpVerification = () => {
       order_id: order.id,
       name: "RENDER",
       description: "Workshop Registration Fee",
+      image: csiLogo,
       prefill: {
         name: state?.name || "",
         email: (state?.email || "").toLowerCase(),

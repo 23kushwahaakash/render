@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
-import Hero from './Pages/Hero';
-import InfoSection from './Pages/InfoSection';
-import RegistrationForm from './Pages/RegistrationForm';
+import React, { Suspense, lazy, useRef } from "react";
+import Hero from "./Pages/Hero";
+
+const InfoSection = lazy(() => import("./Pages/InfoSection"));
+const RegistrationForm = lazy(() => import("./Pages/RegistrationForm"));
 
 const AppRoutes = () => {
     const registerRef = useRef(null);
@@ -24,15 +25,26 @@ const AppRoutes = () => {
                     <Hero onCtaClick={scrollToRegister} />
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-24">
-                        <InfoSection />
+                        <Suspense
+                            fallback={
+                                <div className="h-48 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />
+                            }
+                        >
+                            <InfoSection />
+                        </Suspense>
 
                         <div
                             id="register-section"
                             ref={registerRef}
                             className="pt-16"
                         >
-
-                            <RegistrationForm />
+                            <Suspense
+                                fallback={
+                                    <div className="h-[32rem] rounded-3xl border border-white/10 bg-white/5 animate-pulse" />
+                                }
+                            >
+                                <RegistrationForm />
+                            </Suspense>
                         </div>
                     </div>
                 </main>
