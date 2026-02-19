@@ -95,7 +95,7 @@ const OtpVerification = () => {
     const token = await new Promise((resolve, reject) => {
       window.grecaptcha.ready(() => {
         window.grecaptcha
-          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "payment_initialization" })
+          .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "payment_initiation" })
           .then(resolve)
           .catch(reject);
       });
