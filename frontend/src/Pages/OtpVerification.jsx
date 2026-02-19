@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -16,6 +16,26 @@ const OtpVerification = () => {
   const [statusText, setStatusText] = useState("");
 
   const email = state?.email || "your email";
+  const OTP_FLOW_MAX_AGE_MS = 30 * 60 * 1000;
+  const normalizedPhone = (() => {
+    const digits = (state?.phone || "").replace(/\D/g, "");
+    if (digits.length === 11 && digits.startsWith("0")) {
+      return digits.slice(1);
+    }
+    return digits;
+  })();
+
+  useEffect(() => {
+    const flowEmail = sessionStorage.getItem("otp_flow_email");
+    const flowStartedAt = Number(sessionStorage.getItem("otp_flow_started_at") || 0);
+    const isExpired = !flowStartedAt || Date.now() - flowStartedAt > OTP_FLOW_MAX_AGE_MS;
+    const stateEmail = state?.email?.trim().toLowerCase();
+
+    if (!stateEmail || !flowEmail || isExpired || flowEmail !== stateEmail) {
+      toast.error("Unauthorized access. Please start from registration.");
+      navigate("/");
+    }
+  }, [navigate, state]);
 
   const pollPaymentStatus = async (studentId) => {
     for (let i = 0; i < 10; i += 1) {
@@ -45,12 +65,18 @@ const OtpVerification = () => {
   };
 
   const navigateToSuccess = (studentId) => {
+    const gateToken = `${studentId}:${Date.now()}`;
+    sessionStorage.setItem("payment_success_gate", gateToken);
+    sessionStorage.removeItem("otp_flow_email");
+    sessionStorage.removeItem("otp_flow_started_at");
+
     navigate("/registration-success", {
       state: {
         studentId,
         name: state?.name || "",
         email: state?.email || "",
         paymentStatus: "SUCCESS",
+        gateToken,
       },
     });
   };
@@ -181,7 +207,7 @@ const OtpVerification = () => {
       const verifyPayload = {
         name: state.name,
         email: state.email.trim().toLowerCase(),
-        phone: state.phone,
+        phone: normalizedPhone,
         student_number: state.studentNumber,
         branch: state.branch,
         hostler: state.residence,

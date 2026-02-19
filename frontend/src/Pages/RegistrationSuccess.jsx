@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const RegistrationSuccess = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const name = state?.name || "Participant";
   const email = state?.email || "";
   const studentId = state?.studentId;
+
+  useEffect(() => {
+    const gateToken = sessionStorage.getItem("payment_success_gate");
+    if (!state?.gateToken || !gateToken || gateToken !== state.gateToken) {
+      navigate("/");
+      return;
+    }
+    sessionStorage.removeItem("payment_success_gate");
+  }, [navigate, state]);
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
