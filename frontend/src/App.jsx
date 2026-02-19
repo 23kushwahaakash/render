@@ -11,6 +11,7 @@ import RefundPolicy from "./components/RefundPolicy";
 import TermsAndConditions from "./components/TermsAndConditions";
 import ContactUs from "./Pages/ContactUs";
 import OtpVerification from "./Pages/OtpVerification";
+import RegistrationSuccess from "./Pages/RegistrationSuccess";
 import NotFound from "./Pages/NotFound";
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/verify-otp" element={<OtpVerification />} />
+        <Route path="/registration-success" element={<RegistrationSuccess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 
