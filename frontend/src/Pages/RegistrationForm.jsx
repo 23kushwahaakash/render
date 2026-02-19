@@ -38,6 +38,7 @@ const RegistrationForm = () => {
   useEffect(() => {
     const newErrors = {};
 
+
     if (formData.name && formData.name.length < 3) {
       newErrors.name = "Name is too short";
     }
@@ -103,38 +104,45 @@ const RegistrationForm = () => {
     setIsSubmitting(true);
 
     try {
+      if (!window.grecaptcha) {
+        toast.error("Captcha not loaded. Refresh page.");
+        return;
+      }
+
+      const token = await new Promise((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha
+            .execute(import.meta.env.VITE_RECAPTCHA_SITE_KEY, { action: "send_otp" })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+      
+      console.log(token);
       const response = await axios.post(
         `${baseUrl}/api/users/send-otp/`,
         {
-          "email": formData.email.trim().toLowerCase(),
-        },
-        {
-          timeout: OTP_REQUEST_TIMEOUT_MS,
+          email: formData.email.trim().toLowerCase(),
+          recaptcha_token: token,
         }
       );
+      
 
       if (response.data.success) {
-        navigate("/verify-otp", {
-          state: formData,
-        });
-      } 
-    } catch (error) {
-      console.log(error);
-      if (error.code === "ECONNABORTED") {
-        toast.error("Request timed out. Please respond after sometime.");
-      } else if (error.response) {
-        toast.error(
-          error.response.data.message ||
-            error.response.data.detail ||
-            "OTP sending failed"
-        );
-      } else {
-        toast.error("Server not reachable");
+        navigate("/verify-otp", { state: formData });
       }
+
+    } catch (error) {
+      console.log("FULL ERROR:", error.response?.data);
+      console.log(error.message);
+      toast.error(error.response.data.message || "Server error");
+
+
     } finally {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -163,9 +171,8 @@ const RegistrationForm = () => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Emma Watson"
-              className={`w-full bg-white/5 border ${
-                errors.name ? "border-red-500/50" : "border-white/10"
-              } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
+              className={`w-full bg-white/5 border ${errors.name ? "border-red-500/50" : "border-white/10"
+                } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
               {errors.name && (
@@ -192,9 +199,8 @@ const RegistrationForm = () => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="nameStdno@akgec.ac.in"
-              className={`w-full bg-white/5 border ${
-                errors.email ? "border-red-500/50" : "border-white/10"
-              } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
+              className={`w-full bg-white/5 border ${errors.email ? "border-red-500/50" : "border-white/10"
+                } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
               {errors.email && (
@@ -221,9 +227,8 @@ const RegistrationForm = () => {
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="x x x x x x x x x x"
-              className={`w-full bg-white/5 border ${
-                errors.phone ? "border-red-500/50" : "border-white/10"
-              } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
+              className={`w-full bg-white/5 border ${errors.phone ? "border-red-500/50" : "border-white/10"
+                } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
               {errors.phone && (
@@ -250,9 +255,8 @@ const RegistrationForm = () => {
               value={formData.studentNumber}
               onChange={handleInputChange}
               placeholder="25*****"
-              className={`w-full bg-white/5 border ${
-                errors.studentNumber ? "border-red-500/50" : "border-white/10"
-              } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
+              className={`w-full bg-white/5 border ${errors.studentNumber ? "border-red-500/50" : "border-white/10"
+                } focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none rounded-xl px-4 py-3 text-white transition-all`}
             />
             <AnimatePresence>
               {errors.studentNumber && (
@@ -353,11 +357,10 @@ const RegistrationForm = () => {
           <button
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className={`w-full md:w-auto px-10 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 ${
-              isFormValid && !isSubmitting
-                ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]"
-                : "bg-gray-800 text-gray-500 cursor-not-allowed opacity-50"
-            }`}
+            className={`w-full md:w-auto px-10 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 ${isFormValid && !isSubmitting
+              ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+              : "bg-gray-800 text-gray-500 cursor-not-allowed opacity-50"
+              }`}
           >
             {isSubmitting ? (
               <>
