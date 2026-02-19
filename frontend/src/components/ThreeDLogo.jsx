@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import CSI from "../assets/CSI.png";
 
@@ -6,6 +6,7 @@ const ThreeDLogo = () => {
   // Raw mouse values (normalized)
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const autoMoveEnabled = useRef(true);
 
   // Smooth springs
   const mouseX = useSpring(x, { stiffness: 120, damping: 18 });
@@ -24,7 +25,23 @@ const ThreeDLogo = () => {
   const shadowX = useTransform(mouseX, [-0.5, 0.5], [-30, 30]);
   const shadowY = useTransform(mouseY, [-0.5, 0.5], [30, -30]);
 
+  useEffect(() => {
+    let rafId;
+    const animate = (time) => {
+      if (autoMoveEnabled.current) {
+        const t = time / 1000;
+        x.set(Math.sin(t * 1.5) * 0.16);
+        y.set(Math.cos(t * 1.8) * 0.14);
+      }
+      rafId = requestAnimationFrame(animate);
+    };
+
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
+  }, [x, y]);
+
   const handleMouseMove = (e) => {
+    autoMoveEnabled.current = false;
     const rect = e.currentTarget.getBoundingClientRect();
     const xPos = (e.clientX - rect.left) / rect.width - 0.5;
     const yPos = (e.clientY - rect.top) / rect.height - 0.5;
@@ -34,8 +51,21 @@ const ThreeDLogo = () => {
   };
 
   const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
+    autoMoveEnabled.current = true;
+  };
+
+  const handleClickNearLogo = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+    const nearRadius = Math.min(rect.width, rect.height) * 0.45;
+
+    if (distance <= nearRadius) {
+      x.set(0);
+      y.set(0);
+      autoMoveEnabled.current = true;
+    }
   };
 
   return (
@@ -44,6 +74,7 @@ const ThreeDLogo = () => {
       style={{ perspective: 1500 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClickNearLogo}
     >
       <motion.div
         className="relative w-94 h-64 flex items-center justify-center"
