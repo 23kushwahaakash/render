@@ -9,6 +9,11 @@ const OtpVerification = () => {
   const baseUrl = (import.meta.env.VITE_BASE_URL || "").replace(/\/+$/, "");
   const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
   const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  const PAYMENT_STATUS_INITIAL_DELAY_MS = 4500;
+  const PAYMENT_STATUS_RETRY_DELAY_MS = 2000;
+  const PAYMENT_STATUS_MAX_RETRIES = 6;
+  const PAYMENT_STATUS_PENDING_MESSAGE =
+    "Don't worry, we have received your order. You can check your email for payment status or contact us.";
   const navigate = useNavigate();
   const { state } = useLocation();
   const [otp, setOtp] = useState("");
@@ -39,27 +44,56 @@ const OtpVerification = () => {
   }, [navigate, state]);
 
   const pollPaymentStatus = async (studentId) => {
-    for (let i = 0; i < 10; i += 1) {
-      const token = await getRecaptchaToken("payment_status");
-      const statusResponse = await axios.post(
-        `${baseUrl}/api/users/payment-status/`,
-        {
-          student_id : studentId ,
-          recaptcha_token:token ,
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    let firstRateLimitAttempt = null;
+
+    // Start polling only after a short wait from payment callback event.
+    await sleep(PAYMENT_STATUS_INITIAL_DELAY_MS);
+
+    for (let attempt = 1; attempt <= PAYMENT_STATUS_MAX_RETRIES; attempt += 1) {
+      console.log(`[payment-status] attempt ${attempt}/${PAYMENT_STATUS_MAX_RETRIES}`);
+      try {
+        const token = await getRecaptchaToken("payment_status");
+        const statusResponse = await axios.post(
+          `${baseUrl}/api/users/payment-status/`,
+          {
+            student_id: studentId,
+            recaptcha_token: token,
+          }
+        );
+
+        const status = statusResponse.data?.payment_status;
+        console.log(`[payment-status] attempt ${attempt} -> ${status || "NO_STATUS"}`);
+        if (status === "SUCCESS") {
+          return "SUCCESS";
         }
+        if (status === "FAILED") {
+          return "FAILED";
+        }
+      } catch (error) {
+        const statusCode = error.response?.status;
+        console.log(
+          `[payment-status] attempt ${attempt} failed with status ${statusCode || "NETWORK_ERROR"}`
+        );
 
-      );
-      const status = statusResponse.data?.payment_status;
-
-      if (status === "SUCCESS") {
-        return "SUCCESS";
+        if (statusCode === 429) {
+          if (!firstRateLimitAttempt) {
+            firstRateLimitAttempt = attempt;
+            console.log(`[payment-status] rate-limit started at attempt ${attempt}`);
+          }
+          // Stop early after second 429 to avoid hammering the endpoint.
+          if (attempt - firstRateLimitAttempt >= 1) {
+            console.log("[payment-status] stopping retries early due to repeated rate-limit");
+            break;
+          }
+        } else {
+          throw error;
+        }
       }
 
-      if (status === "FAILED") {
-        return "FAILED";
+      if (attempt < PAYMENT_STATUS_MAX_RETRIES) {
+        await sleep(PAYMENT_STATUS_RETRY_DELAY_MS);
       }
-
-      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
     return "PENDING";
@@ -112,17 +146,20 @@ const OtpVerification = () => {
           }
           if (finalStatus === "FAILED") {
             toast.error("Payment failed. Please try again.");
+            setStatusText("");
+            setIsPaying(false);
             return;
           }
-          toast("Payment is still processing. Please check status again in a moment.");
+          setStatusText(PAYMENT_STATUS_PENDING_MESSAGE);
+          toast(PAYMENT_STATUS_PENDING_MESSAGE);
         } catch (error) {
           toast.error(
             error.response?.data?.detail ||
             error.response?.data?.message ||
             "Payment status check failed"
           );
+          setStatusText("");
         }
-        setStatusText("");
         setIsPaying(false);
       },
       modal: {
@@ -148,17 +185,20 @@ const OtpVerification = () => {
         }
         if (finalStatus === "FAILED") {
           toast.error("Payment failed. Please try again.");
+          setStatusText("");
+          setIsPaying(false);
           return;
         }
-        toast("Payment is still processing. Please check status again in a moment.");
+        setStatusText(PAYMENT_STATUS_PENDING_MESSAGE);
+        toast(PAYMENT_STATUS_PENDING_MESSAGE);
       } catch (error) {
         toast.error(
           error.response?.data?.detail ||
           error.response?.data?.message ||
           "Payment status check failed"
         );
+        setStatusText("");
       }
-      setStatusText("");
       setIsPaying(false);
     });
     rzp.open();
