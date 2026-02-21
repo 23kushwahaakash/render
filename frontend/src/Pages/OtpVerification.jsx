@@ -270,6 +270,7 @@ const OtpVerification = () => {
         toast.error("Student ID not returned after OTP verification");
         return;
       }
+      
 
       setIsPaying(true);
       setStatusText("Creating payment order...");
