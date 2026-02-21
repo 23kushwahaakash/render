@@ -263,6 +263,7 @@ const OtpVerification = () => {
         `${baseUrl}/api/users/verify-otp/`,
         verifyPayload
       );
+      console.log(verifyResponse);
 
       const studentId = verifyResponse.data?.id;
       if (!studentId) {
